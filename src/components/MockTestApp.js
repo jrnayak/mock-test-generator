@@ -17,7 +17,6 @@ const MockTestApp = () => {
   const [selectedTopic, setSelectedTopic] = useState('');
   const [editingTopic, setEditingTopic] = useState(null);
   const [topicQuestions, setTopicQuestions] = useState('');
-  const [isProcessingPDF, setIsProcessingPDF] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [numQuestionsToGenerate, setNumQuestionsToGenerate] = useState(10);
 
@@ -48,68 +47,6 @@ const MockTestApp = () => {
     } catch (error) {
       console.error('Error saving topics:', error);
       alert('Error saving topics. Please try again.');
-    }
-  };
-
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (file.type !== 'application/pdf') {
-      alert('Please upload a PDF file');
-      return;
-    }
-
-    setIsProcessingPDF(true);
-
-    try {
-      // Read file as text using FileReader
-      const text = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = reject;
-        reader.readAsText(file);
-      });
-      
-      // If text extraction worked, use it
-      if (text && text.trim()) {
-        setTopicQuestions(text.trim());
-        if (!editingTopic || !editingTopic.name) {
-          const fileName = file.name.replace('.pdf', '').replace(/_/g, ' ');
-          setEditingTopic({ name: fileName, questions: [] });
-        }
-        setIsProcessingPDF(false);
-        alert('PDF content extracted! Review the questions below.');
-        return;
-      }
-    } catch (error) {
-      console.log('Text extraction failed, trying binary method');
-    }
-
-    // Fallback: Try binary reading
-    try {
-      const arrayBuffer = await file.arrayBuffer();
-      const uint8Array = new Uint8Array(arrayBuffer);
-      const decoder = new TextDecoder('utf-8');
-      const text = decoder.decode(uint8Array);
-      
-      // Extract readable text from PDF binary
-      const cleanText = text.replace(/[^\x20-\x7E\n]/g, ' ').replace(/\s+/g, ' ').trim();
-      
-      if (cleanText) {
-        setTopicQuestions(cleanText);
-        if (!editingTopic || !editingTopic.name) {
-          const fileName = file.name.replace('.pdf', '').replace(/_/g, ' ');
-          setEditingTopic({ name: fileName, questions: [] });
-        }
-      }
-      
-      setIsProcessingPDF(false);
-      alert('PDF processed! Please review and clean up the extracted text below. You can also use AI to generate questions from these samples.');
-    } catch (error) {
-      console.error('Error:', error);
-      setIsProcessingPDF(false);
-      alert('Could not extract from PDF automatically. Please paste sample questions manually and use AI to generate more questions.');
     }
   };
 
@@ -387,22 +324,22 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h1 className="text-3xl font-bold text-center mb-2 text-purple-700">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-4 px-2 sm:p-6">
+      <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-3 sm:p-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2 text-purple-700">
           Mock Test Generator
         </h1>
-        <p className="text-center text-gray-600 mb-6">
+        <p className="text-center text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
           Customizable Math Tests
         </p>
 
         {/* Topic Selection and Controls */}
-        <div className="mb-6 space-y-4">
-          <div className="flex gap-2">
+        <div className="mb-4 sm:mb-6 space-y-3">
+          <div className="flex flex-col sm:flex-row gap-2">
             <select
               value={selectedTopic}
               onChange={(e) => setSelectedTopic(e.target.value)}
-              className="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+              className="flex-1 px-3 py-2 text-sm sm:text-base border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
               disabled={isActive}
             >
               <option value="">Default FDP Questions</option>
@@ -412,49 +349,51 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
                 </option>
               ))}
             </select>
-            <button
-              onClick={startNewTopic}
-              className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 flex items-center gap-2"
-              disabled={isActive}
-            >
-              <Plus size={18} />
-              New Topic
-            </button>
-            <button
-              onClick={addMoreQuestions}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-2"
-              disabled={isActive || !selectedTopic}
-            >
-              <Plus size={18} />
-              Add Questions
-            </button>
-            <button
-              onClick={() => setShowSettings(!showSettings)}
-              className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 flex items-center gap-2"
-              disabled={isActive}
-            >
-              <Settings size={18} />
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={startNewTopic}
+                className="flex-1 sm:flex-none px-3 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 flex items-center justify-center gap-2 text-sm sm:text-base"
+                disabled={isActive}
+              >
+                <Plus size={18} />
+                <span className="sm:inline">New Topic</span>
+              </button>
+              <button
+                onClick={addMoreQuestions}
+                className="flex-1 sm:flex-none px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2 text-sm sm:text-base"
+                disabled={isActive || !selectedTopic}
+              >
+                <Plus size={18} />
+                <span className="sm:inline">Add Questions</span>
+              </button>
+              <button
+                onClick={() => setShowSettings(!showSettings)}
+                className="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 flex items-center justify-center gap-2"
+                disabled={isActive}
+              >
+                <Settings size={18} />
+              </button>
+            </div>
           </div>
 
           {/* Settings Panel */}
           {showSettings && (
-            <div className="p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
-              <h3 className="font-bold mb-3 text-blue-700">Settings</h3>
+            <div className="p-3 sm:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+              <h3 className="font-bold mb-3 text-blue-700 text-sm sm:text-base">Settings</h3>
               <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <label className="text-sm font-semibold">Timer Duration (minutes):</label>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                  <label className="text-xs sm:text-sm font-semibold">Timer Duration (minutes):</label>
                   <input
                     type="number"
                     value={customTime}
                     onChange={(e) => setCustomTime(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-20 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                    className="w-20 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-sm"
                     min="1"
                     max="120"
                   />
                   <button
                     onClick={updateTimer}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm"
                   >
                     Apply
                   </button>
@@ -462,18 +401,18 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
                 
                 {selectedTopic && (
                   <div className="pt-3 border-t border-blue-200">
-                    <h4 className="font-semibold mb-2 text-blue-700">Manage Current Topic</h4>
-                    <div className="flex gap-2">
+                    <h4 className="font-semibold mb-2 text-blue-700 text-sm sm:text-base">Manage Current Topic</h4>
+                    <div className="flex flex-col sm:flex-row gap-2">
                       <button
                         onClick={() => editTopic(topics.find(t => t.name === selectedTopic))}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                        className="flex items-center justify-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm"
                       >
                         <Edit2 size={16} />
                         Edit Topic
                       </button>
                       <button
                         onClick={() => deleteTopic(selectedTopic)}
-                        className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                        className="flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm"
                       >
                         <Trash2 size={16} />
                         Delete Topic
@@ -487,43 +426,29 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
 
           {/* Topic Manager Panel */}
           {showTopicManager && (
-            <div className="p-4 bg-green-50 rounded-lg border-2 border-green-200">
-              <h3 className="font-bold mb-3 text-green-700">
+            <div className="p-3 sm:p-4 bg-green-50 rounded-lg border-2 border-green-200">
+              <h3 className="font-bold mb-3 text-green-700 text-sm sm:text-base">
                 {editingTopic?.originalName ? 'Edit Topic' : 'Create New Topic'}
               </h3>
               <div className="space-y-3">
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Upload PDF:</label>
-                  <input
-                    type="file"
-                    accept=".pdf"
-                    onChange={handleFileUpload}
-                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg"
-                    disabled={isProcessingPDF}
-                  />
-                  {isProcessingPDF && (
-                    <p className="text-sm text-blue-600 mt-1 animate-pulse">Processing PDF, please wait...</p>
-                  )}
-                  <p className="text-xs text-gray-600 mt-1">Upload a PDF with sample questions, or paste questions below</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-1">Topic Name:</label>
+                  <label className="block text-xs sm:text-sm font-semibold mb-1">Topic Name:</label>
                   <input
                     type="text"
                     value={editingTopic?.name || ''}
                     onChange={(e) => setEditingTopic({ ...editingTopic, name: e.target.value })}
                     placeholder="e.g., Year 5 Algebra"
-                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Sample Questions (one per line):</label>
+                  <label className="block text-xs sm:text-sm font-semibold mb-1">Questions (one per line):</label>
                   <textarea
                     value={topicQuestions}
                     onChange={(e) => setTopicQuestions(e.target.value)}
                     placeholder="Paste or type sample questions here, one per line&#10;e.g., Convert 3/4 to a decimal&#10;What is 25% of 80?"
                     rows="8"
-                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-mono text-sm"
+                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-mono text-xs sm:text-sm"
                   />
                   <p className="text-xs text-gray-600 mt-1">
                     {topicQuestions.split('\n').filter(q => q.trim()).length} questions entered
@@ -532,25 +457,27 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
                 
                 {/* AI Generation Section */}
                 <div className="p-3 bg-purple-50 rounded-lg border-2 border-purple-200">
-                  <h4 className="font-semibold mb-2 text-purple-700">AI Question Generator</h4>
+                  <h4 className="font-semibold mb-2 text-purple-700 text-xs sm:text-sm">✨ AI Question Generator</h4>
                   <p className="text-xs text-gray-600 mb-2">
-                    AI will analyze your sample questions and generate similar ones
+                    Add a few sample questions above, then AI will generate similar ones
                   </p>
-                  <div className="flex items-center gap-2">
-                    <label className="text-sm font-semibold">Generate:</label>
-                    <input
-                      type="number"
-                      value={numQuestionsToGenerate}
-                      onChange={(e) => setNumQuestionsToGenerate(Math.max(1, Math.min(50, parseInt(e.target.value) || 10)))}
-                      className="w-20 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
-                      min="1"
-                      max="50"
-                    />
-                    <span className="text-sm">questions</span>
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <div className="flex items-center gap-2">
+                      <label className="text-xs sm:text-sm font-semibold whitespace-nowrap">Generate:</label>
+                      <input
+                        type="number"
+                        value={numQuestionsToGenerate}
+                        onChange={(e) => setNumQuestionsToGenerate(Math.max(1, Math.min(50, parseInt(e.target.value) || 10)))}
+                        className="w-16 px-2 py-1 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-sm"
+                        min="1"
+                        max="50"
+                      />
+                      <span className="text-xs sm:text-sm">questions</span>
+                    </div>
                     <button
                       onClick={generateQuestionsWithAI}
                       disabled={isGenerating || !topicQuestions.trim()}
-                      className="flex-1 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed"
+                      className="flex-1 sm:flex-none px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed text-xs sm:text-sm"
                     >
                       {isGenerating ? 'Generating...' : '✨ Generate with AI'}
                     </button>
@@ -560,7 +487,7 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
                 <div className="flex gap-2">
                   <button
                     onClick={saveTopic}
-                    className="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-semibold"
+                    className="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-semibold text-sm"
                   >
                     Save Topic
                   </button>
@@ -570,7 +497,7 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
                       setEditingTopic(null);
                       setTopicQuestions('');
                     }}
-                    className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+                    className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm"
                   >
                     Cancel
                   </button>
@@ -581,10 +508,10 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
         </div>
 
         {/* Timer and Controls */}
-        <div className="flex justify-between items-center mb-6 p-4 bg-blue-100 rounded-lg">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 sm:mb-6 p-3 sm:p-4 bg-blue-100 rounded-lg">
           <div className="flex items-center gap-2">
-            <Clock className="text-blue-600" />
-            <span className={`text-2xl font-bold ${timeLeft < 60 ? 'text-red-600' : 'text-blue-600'}`}>
+            <Clock className="text-blue-600" size={20} />
+            <span className={`text-xl sm:text-2xl font-bold ${timeLeft < 60 ? 'text-red-600' : 'text-blue-600'}`}>
               {formatTime(timeLeft)}
             </span>
           </div>
@@ -592,20 +519,20 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
           {!isActive && !submitted && (
             <button
               onClick={startTest}
-              className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-semibold"
+              className="w-full sm:w-auto px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-semibold text-sm sm:text-base"
             >
               Start Test
             </button>
           )}
 
           {submitted && (
-            <div className="flex items-center gap-4">
-              <div className="text-xl font-bold text-purple-600">
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+              <div className="text-lg sm:text-xl font-bold text-purple-600">
                 Score: {score}/10 ({Math.round((score / 10) * 100)}%)
               </div>
               <button
                 onClick={resetTest}
-                className="flex items-center gap-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 text-sm sm:text-base"
               >
                 <RefreshCw size={18} />
                 New Test
@@ -615,16 +542,16 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
         </div>
 
         {/* Questions */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {questions.length === 0 && !isActive && (
-            <div className="text-center p-8 bg-gray-50 rounded-lg border-2 border-gray-200">
-              <p className="text-gray-600">Click "Start Test" to generate questions</p>
+            <div className="text-center p-6 sm:p-8 bg-gray-50 rounded-lg border-2 border-gray-200">
+              <p className="text-gray-600 text-sm sm:text-base">Click "Start Test" to generate questions</p>
             </div>
           )}
           {questions.map((q, index) => (
             <div
               key={q.id}
-              className={`p-4 rounded-lg border-2 ${
+              className={`p-3 sm:p-4 rounded-lg border-2 ${
                 submitted && q.answer
                   ? (answers[q.id] || '').trim().toLowerCase() === q.answer.toLowerCase()
                     ? 'bg-green-50 border-green-300'
@@ -632,34 +559,34 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
                   : 'bg-gray-50 border-gray-200'
               }`}
             >
-              <div className="flex items-start gap-3">
-                <span className="font-bold text-lg text-purple-600 min-w-8">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <span className="font-bold text-base sm:text-lg text-purple-600 min-w-6 sm:min-w-8">
                   {index + 1}.
                 </span>
-                <div className="flex-1">
-                  <p className="text-lg mb-3">{q.question}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm sm:text-lg mb-2 sm:mb-3 break-words">{q.question}</p>
                   <input
                     type="text"
                     value={answers[q.id] || ''}
                     onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                     disabled={!isActive || submitted}
-                    className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none disabled:bg-gray-100"
+                    className="w-full px-3 sm:px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none disabled:bg-gray-100 text-sm sm:text-base"
                     placeholder="Your answer"
                   />
                   {submitted && q.answer && (
                     <div className="mt-2 flex items-center gap-2">
                       {(answers[q.id] || '').trim().toLowerCase() === q.answer.toLowerCase() ? (
                         <div className="flex items-center gap-2 text-green-600">
-                          <CheckCircle size={20} />
-                          <span className="font-semibold">Correct!</span>
+                          <CheckCircle size={18} />
+                          <span className="font-semibold text-sm sm:text-base">Correct!</span>
                         </div>
                       ) : (
                         <div className="text-red-600">
                           <div className="flex items-center gap-2">
-                            <XCircle size={20} />
-                            <span className="font-semibold">Incorrect</span>
+                            <XCircle size={18} />
+                            <span className="font-semibold text-sm sm:text-base">Incorrect</span>
                           </div>
-                          <p className="mt-1 text-sm">Correct answer: {q.answer}</p>
+                          <p className="mt-1 text-xs sm:text-sm">Correct answer: {q.answer}</p>
                         </div>
                       )}
                     </div>
@@ -673,7 +600,7 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
         {isActive && !submitted && (
           <button
             onClick={handleSubmit}
-            className="w-full mt-6 px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 font-semibold text-lg"
+            className="w-full mt-4 sm:mt-6 px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 font-semibold text-base sm:text-lg"
           >
             Submit Test
           </button>
