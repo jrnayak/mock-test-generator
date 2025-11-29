@@ -1,5 +1,5 @@
-import MockTestApp from '@/components/MockTestApp'
+import MockTestApp from '../components/MockTestApp'
 
 export default function Home() {
-  return 
+  return <MockTestApp />
 }
