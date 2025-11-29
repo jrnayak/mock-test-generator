@@ -324,17 +324,17 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-4 px-2 sm:p-6">
-      <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-3 sm:p-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2 text-purple-700">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-2 sm:p-4">
+      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-2 sm:p-4">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-1 sm:mb-2 text-purple-700">
           Mock Test Generator
         </h1>
-        <p className="text-center text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
+        <p className="text-center text-gray-600 mb-3 sm:mb-4 text-xs sm:text-sm">
           Customizable Math Tests
         </p>
 
         {/* Topic Selection and Controls */}
-        <div className="mb-4 sm:mb-6 space-y-3">
+        <div className="mb-3 sm:mb-4 space-y-2">
           <div className="flex flex-col sm:flex-row gap-2">
             <select
               value={selectedTopic}
@@ -378,9 +378,9 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
 
           {/* Settings Panel */}
           {showSettings && (
-            <div className="p-3 sm:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
-              <h3 className="font-bold mb-3 text-blue-700 text-sm sm:text-base">Settings</h3>
-              <div className="space-y-3">
+            <div className="p-2 sm:p-3 bg-blue-50 rounded-lg border-2 border-blue-200">
+              <h3 className="font-bold mb-2 text-blue-700 text-sm">Settings</h3>
+              <div className="space-y-2">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                   <label className="text-xs sm:text-sm font-semibold">Timer Duration (minutes):</label>
                   <input
@@ -426,11 +426,11 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
 
           {/* Topic Manager Panel */}
           {showTopicManager && (
-            <div className="p-3 sm:p-4 bg-green-50 rounded-lg border-2 border-green-200">
-              <h3 className="font-bold mb-3 text-green-700 text-sm sm:text-base">
+            <div className="p-2 sm:p-3 bg-green-50 rounded-lg border-2 border-green-200">
+              <h3 className="font-bold mb-2 text-green-700 text-sm">
                 {editingTopic?.originalName ? 'Edit Topic' : 'Create New Topic'}
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div>
                   <label className="block text-xs sm:text-sm font-semibold mb-1">Topic Name:</label>
                   <input
@@ -508,10 +508,10 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
         </div>
 
         {/* Timer and Controls */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 sm:mb-6 p-3 sm:p-4 bg-blue-100 rounded-lg">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-2 mb-3 sm:mb-4 p-2 sm:p-3 bg-blue-100 rounded-lg">
           <div className="flex items-center gap-2">
-            <Clock className="text-blue-600" size={20} />
-            <span className={`text-xl sm:text-2xl font-bold ${timeLeft < 60 ? 'text-red-600' : 'text-blue-600'}`}>
+            <Clock className="text-blue-600" size={18} />
+            <span className={`text-lg sm:text-xl font-bold ${timeLeft < 60 ? 'text-red-600' : 'text-blue-600'}`}>
               {formatTime(timeLeft)}
             </span>
           </div>
@@ -542,16 +542,16 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
         </div>
 
         {/* Questions */}
-        <div className="space-y-3 sm:space-y-4">
+        <div className="space-y-2 sm:space-y-3">
           {questions.length === 0 && !isActive && (
-            <div className="text-center p-6 sm:p-8 bg-gray-50 rounded-lg border-2 border-gray-200">
-              <p className="text-gray-600 text-sm sm:text-base">Click "Start Test" to generate questions</p>
+            <div className="text-center p-4 sm:p-6 bg-gray-50 rounded-lg border-2 border-gray-200">
+              <p className="text-gray-600 text-xs sm:text-sm">Click "Start Test" to generate questions</p>
             </div>
           )}
           {questions.map((q, index) => (
             <div
               key={q.id}
-              className={`p-3 sm:p-4 rounded-lg border-2 ${
+              className={`p-2 sm:p-3 rounded-lg border-2 ${
                 submitted && q.answer
                   ? (answers[q.id] || '').trim().toLowerCase() === q.answer.toLowerCase()
                     ? 'bg-green-50 border-green-300'
@@ -559,34 +559,34 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
                   : 'bg-gray-50 border-gray-200'
               }`}
             >
-              <div className="flex items-start gap-2 sm:gap-3">
-                <span className="font-bold text-base sm:text-lg text-purple-600 min-w-6 sm:min-w-8">
+              <div className="flex items-start gap-2">
+                <span className="font-bold text-sm sm:text-base text-purple-600 min-w-5 sm:min-w-6 flex-shrink-0">
                   {index + 1}.
                 </span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm sm:text-lg mb-2 sm:mb-3 break-words">{q.question}</p>
+                <div className="flex-1 min-w-0 w-full">
+                  <p className="text-xs sm:text-sm md:text-base mb-2 break-words">{q.question}</p>
                   <input
                     type="text"
                     value={answers[q.id] || ''}
                     onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                     disabled={!isActive || submitted}
-                    className="w-full px-3 sm:px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none disabled:bg-gray-100 text-sm sm:text-base"
+                    className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none disabled:bg-gray-100 text-xs sm:text-sm"
                     placeholder="Your answer"
                   />
                   {submitted && q.answer && (
-                    <div className="mt-2 flex items-center gap-2">
+                    <div className="mt-1.5 sm:mt-2 flex items-center gap-1.5 sm:gap-2">
                       {(answers[q.id] || '').trim().toLowerCase() === q.answer.toLowerCase() ? (
-                        <div className="flex items-center gap-2 text-green-600">
-                          <CheckCircle size={18} />
-                          <span className="font-semibold text-sm sm:text-base">Correct!</span>
+                        <div className="flex items-center gap-1.5 sm:gap-2 text-green-600">
+                          <CheckCircle size={16} className="sm:w-5 sm:h-5 flex-shrink-0" />
+                          <span className="font-semibold text-xs sm:text-sm">Correct!</span>
                         </div>
                       ) : (
                         <div className="text-red-600">
-                          <div className="flex items-center gap-2">
-                            <XCircle size={18} />
-                            <span className="font-semibold text-sm sm:text-base">Incorrect</span>
+                          <div className="flex items-center gap-1.5 sm:gap-2">
+                            <XCircle size={16} className="sm:w-5 sm:h-5 flex-shrink-0" />
+                            <span className="font-semibold text-xs sm:text-sm">Incorrect</span>
                           </div>
-                          <p className="mt-1 text-xs sm:text-sm">Correct answer: {q.answer}</p>
+                          <p className="mt-1 text-xs break-words">Correct answer: {q.answer}</p>
                         </div>
                       )}
                     </div>
@@ -600,7 +600,7 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
         {isActive && !submitted && (
           <button
             onClick={handleSubmit}
-            className="w-full mt-4 sm:mt-6 px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 font-semibold text-base sm:text-lg"
+            className="w-full mt-3 sm:mt-4 px-4 py-2 sm:py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 font-semibold text-sm sm:text-base"
           >
             Submit Test
           </button>
