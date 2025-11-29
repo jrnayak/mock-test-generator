@@ -324,51 +324,57 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-2 sm:p-4">
-      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-2 sm:p-4">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-1 sm:mb-2 text-purple-700">
-          Mock Test Generator
-        </h1>
-        <p className="text-center text-gray-600 mb-3 sm:mb-4 text-xs sm:text-sm">
-          Customizable Math Tests
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      <div className="container mx-auto px-3 py-4 sm:px-6 sm:py-8 max-w-5xl">
+        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-4 sm:p-6 text-white">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-1 sm:mb-2">
+              🎓 Mock Test Generator
+            </h1>
+            <p className="text-center text-purple-100 text-xs sm:text-sm">
+              Customizable Math Tests
+            </p>
+          </div>
+
+          <div className="p-3 sm:p-6"
 
         {/* Topic Selection and Controls */}
-        <div className="mb-3 sm:mb-4 space-y-2">
-          <div className="flex flex-col sm:flex-row gap-2">
+        <div className="mb-4 sm:mb-5 space-y-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <select
               value={selectedTopic}
               onChange={(e) => setSelectedTopic(e.target.value)}
-              className="flex-1 px-3 py-2 text-sm sm:text-base border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+              className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 border-purple-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 focus:outline-none bg-white shadow-sm transition-all"
               disabled={isActive}
             >
-              <option value="">Default FDP Questions</option>
+              <option value="">📚 Default FDP Questions</option>
               {topics.map((topic, idx) => (
                 <option key={idx} value={topic.name}>
-                  {topic.name} ({topic.questions && topic.questions.length ? topic.questions.length : 0} questions)
+                  📝 {topic.name} ({topic.questions && topic.questions.length ? topic.questions.length : 0} questions)
                 </option>
               ))}
             </select>
             <div className="flex gap-2">
               <button
                 onClick={startNewTopic}
-                className="flex-1 sm:flex-none px-3 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 flex items-center justify-center gap-2 text-sm sm:text-base"
+                className="flex-1 sm:flex-none px-4 py-2.5 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl hover:from-purple-600 hover:to-purple-700 flex items-center justify-center gap-2 text-sm font-semibold shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isActive}
               >
                 <Plus size={18} />
-                <span className="sm:inline">New Topic</span>
+                <span>New Topic</span>
               </button>
               <button
                 onClick={addMoreQuestions}
-                className="flex-1 sm:flex-none px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2 text-sm sm:text-base"
+                className="flex-1 sm:flex-none px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 flex items-center justify-center gap-2 text-sm font-semibold shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isActive || !selectedTopic}
               >
                 <Plus size={18} />
-                <span className="sm:inline">Add Questions</span>
+                <span>Add Questions</span>
               </button>
               <button
                 onClick={() => setShowSettings(!showSettings)}
-                className="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 flex items-center justify-center gap-2"
+                className="px-4 py-2.5 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl hover:from-gray-600 hover:to-gray-700 flex items-center justify-center shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isActive}
               >
                 <Settings size={18} />
@@ -378,41 +384,44 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
 
           {/* Settings Panel */}
           {showSettings && (
-            <div className="p-2 sm:p-3 bg-blue-50 rounded-lg border-2 border-blue-200">
-              <h3 className="font-bold mb-2 text-blue-700 text-sm">Settings</h3>
-              <div className="space-y-2">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                  <label className="text-xs sm:text-sm font-semibold">Timer Duration (minutes):</label>
+            <div className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border-2 border-blue-300 shadow-inner">
+              <h3 className="font-bold mb-3 text-blue-700 text-base flex items-center gap-2">
+                <Settings size={18} />
+                Settings
+              </h3>
+              <div className="space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 bg-white p-3 rounded-lg">
+                  <label className="text-sm font-semibold text-gray-700">⏱️ Timer Duration (minutes):</label>
                   <input
                     type="number"
                     value={customTime}
                     onChange={(e) => setCustomTime(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-20 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-sm"
+                    className="w-20 px-3 py-2 border-2 border-blue-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none text-sm text-center font-semibold"
                     min="1"
                     max="120"
                   />
                   <button
                     onClick={updateTimer}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm"
+                    className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 text-sm font-semibold shadow-md transition-all"
                   >
                     Apply
                   </button>
                 </div>
                 
                 {selectedTopic && (
-                  <div className="pt-3 border-t border-blue-200">
-                    <h4 className="font-semibold mb-2 text-blue-700 text-sm sm:text-base">Manage Current Topic</h4>
+                  <div className="pt-3 border-t-2 border-blue-200">
+                    <h4 className="font-semibold mb-2 text-blue-700 text-sm">Manage Current Topic</h4>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <button
                         onClick={() => editTopic(topics.find(t => t.name === selectedTopic))}
-                        className="flex items-center justify-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm"
+                        className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 text-sm font-semibold shadow-md transition-all"
                       >
                         <Edit2 size={16} />
                         Edit Topic
                       </button>
                       <button
                         onClick={() => deleteTopic(selectedTopic)}
-                        className="flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm"
+                        className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 text-sm font-semibold shadow-md transition-all"
                       >
                         <Trash2 size={16} />
                         Delete Topic
@@ -426,70 +435,73 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
 
           {/* Topic Manager Panel */}
           {showTopicManager && (
-            <div className="p-2 sm:p-3 bg-green-50 rounded-lg border-2 border-green-200">
-              <h3 className="font-bold mb-2 text-green-700 text-sm">
+            <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl border-2 border-green-300 shadow-inner">
+              <h3 className="font-bold mb-3 text-green-700 text-base flex items-center gap-2">
+                {editingTopic?.originalName ? <Edit2 size={18} /> : <Plus size={18} />}
                 {editingTopic?.originalName ? 'Edit Topic' : 'Create New Topic'}
               </h3>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div>
-                  <label className="block text-xs sm:text-sm font-semibold mb-1">Topic Name:</label>
+                  <label className="block text-sm font-semibold mb-1.5 text-gray-700">📌 Topic Name:</label>
                   <input
                     type="text"
                     value={editingTopic?.name || ''}
                     onChange={(e) => setEditingTopic({ ...editingTopic, name: e.target.value })}
                     placeholder="e.g., Year 5 Algebra"
-                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-sm"
+                    className="w-full px-4 py-2.5 border-2 border-green-200 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none text-sm bg-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs sm:text-sm font-semibold mb-1">Questions (one per line):</label>
+                  <label className="block text-sm font-semibold mb-1.5 text-gray-700">📝 Questions (one per line):</label>
                   <textarea
                     value={topicQuestions}
                     onChange={(e) => setTopicQuestions(e.target.value)}
                     placeholder="Paste or type sample questions here, one per line&#10;e.g., Convert 3/4 to a decimal&#10;What is 25% of 80?"
-                    rows="8"
-                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-mono text-xs sm:text-sm"
+                    rows="6"
+                    className="w-full px-4 py-2.5 border-2 border-green-200 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none font-mono text-sm bg-white"
                   />
-                  <p className="text-xs text-gray-600 mt-1">
-                    {topicQuestions.split('\n').filter(q => q.trim()).length} questions entered
+                  <p className="text-xs text-gray-600 mt-1.5 flex items-center gap-1">
+                    <span className="font-semibold text-green-600">{topicQuestions.split('\n').filter(q => q.trim()).length}</span> questions entered
                   </p>
                 </div>
                 
                 {/* AI Generation Section */}
-                <div className="p-3 bg-purple-50 rounded-lg border-2 border-purple-200">
-                  <h4 className="font-semibold mb-2 text-purple-700 text-xs sm:text-sm">✨ AI Question Generator</h4>
-                  <p className="text-xs text-gray-600 mb-2">
+                <div className="p-3 bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg border-2 border-purple-300">
+                  <h4 className="font-semibold mb-2 text-purple-700 text-sm flex items-center gap-1.5">
+                    ✨ AI Question Generator
+                  </h4>
+                  <p className="text-xs text-gray-600 mb-2.5">
                     Add a few sample questions above, then AI will generate similar ones
                   </p>
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-white p-2.5 rounded-lg">
                     <div className="flex items-center gap-2">
-                      <label className="text-xs sm:text-sm font-semibold whitespace-nowrap">Generate:</label>
+                      <label className="text-xs font-semibold whitespace-nowrap text-gray-700">Generate:</label>
                       <input
                         type="number"
                         value={numQuestionsToGenerate}
                         onChange={(e) => setNumQuestionsToGenerate(Math.max(1, Math.min(50, parseInt(e.target.value) || 10)))}
-                        className="w-16 px-2 py-1 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-sm"
+                        className="w-16 px-2 py-1.5 border-2 border-purple-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 focus:outline-none text-sm text-center font-semibold"
                         min="1"
                         max="50"
                       />
-                      <span className="text-xs sm:text-sm">questions</span>
+                      <span className="text-xs text-gray-600">questions</span>
                     </div>
                     <button
                       onClick={generateQuestionsWithAI}
                       disabled={isGenerating || !topicQuestions.trim()}
-                      className="flex-1 sm:flex-none px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed text-xs sm:text-sm"
+                      className="flex-1 sm:flex-none px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 font-semibold disabled:opacity-50 disabled:cursor-not-allowed text-sm shadow-md transition-all"
                     >
-                      {isGenerating ? 'Generating...' : '✨ Generate with AI'}
+                      {isGenerating ? '⏳ Generating...' : '✨ Generate with AI'}
                     </button>
                   </div>
                 </div>
                 
-                <div className="flex gap-2">
+                <div className="flex gap-2 pt-2">
                   <button
                     onClick={saveTopic}
-                    className="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-semibold text-sm"
+                    className="flex-1 px-4 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 font-semibold text-sm shadow-md transition-all"
                   >
-                    Save Topic
+                    💾 Save Topic
                   </button>
                   <button
                     onClick={() => {
@@ -497,7 +509,7 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
                       setEditingTopic(null);
                       setTopicQuestions('');
                     }}
-                    className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm"
+                    className="px-4 py-2.5 bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-lg hover:from-gray-500 hover:to-gray-600 text-sm shadow-md transition-all"
                   >
                     Cancel
                   </button>
@@ -508,10 +520,10 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
         </div>
 
         {/* Timer and Controls */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-2 mb-3 sm:mb-4 p-2 sm:p-3 bg-blue-100 rounded-lg">
-          <div className="flex items-center gap-2">
-            <Clock className="text-blue-600" size={18} />
-            <span className={`text-lg sm:text-xl font-bold ${timeLeft < 60 ? 'text-red-600' : 'text-blue-600'}`}>
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 sm:mb-5 p-4 bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl border-2 border-blue-200 shadow-md">
+          <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-lg shadow-sm">
+            <Clock className="text-blue-600" size={24} />
+            <span className={`text-2xl sm:text-3xl font-bold ${timeLeft < 60 ? 'text-red-600' : 'text-blue-600'}`}>
               {formatTime(timeLeft)}
             </span>
           </div>
@@ -519,20 +531,24 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
           {!isActive && !submitted && (
             <button
               onClick={startTest}
-              className="w-full sm:w-auto px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-semibold text-sm sm:text-base"
+              className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 font-bold text-base shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
             >
-              Start Test
+              🚀 Start Test
             </button>
           )}
 
           {submitted && (
             <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-              <div className="text-lg sm:text-xl font-bold text-purple-600">
-                Score: {score}/10 ({Math.round((score / 10) * 100)}%)
+              <div className="text-xl font-bold bg-white px-4 py-2 rounded-lg shadow-sm">
+                <span className="text-purple-600">Score: {score}/10</span>
+                <span className="text-gray-400 mx-2">•</span>
+                <span className={`${score >= 7 ? 'text-green-600' : score >= 5 ? 'text-yellow-600' : 'text-red-600'}`}>
+                  {Math.round((score / 10) * 100)}%
+                </span>
               </div>
               <button
                 onClick={resetTest}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 text-sm sm:text-base"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl hover:from-purple-600 hover:to-purple-700 font-semibold shadow-md hover:shadow-lg transition-all"
               >
                 <RefreshCw size={18} />
                 New Test
@@ -542,51 +558,60 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
         </div>
 
         {/* Questions */}
-        <div className="space-y-2 sm:space-y-3">
+        <div className="space-y-3 sm:space-y-4">
           {questions.length === 0 && !isActive && (
-            <div className="text-center p-4 sm:p-6 bg-gray-50 rounded-lg border-2 border-gray-200">
-              <p className="text-gray-600 text-xs sm:text-sm">Click "Start Test" to generate questions</p>
+            <div className="text-center p-8 sm:p-12 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-dashed border-gray-300">
+              <div className="text-4xl mb-3">📝</div>
+              <p className="text-gray-600 text-sm sm:text-base font-medium">Click "Start Test" to generate questions</p>
             </div>
           )}
           {questions.map((q, index) => (
             <div
               key={q.id}
-              className={`p-2 sm:p-3 rounded-lg border-2 ${
+              className={`p-4 sm:p-5 rounded-xl border-2 shadow-md transition-all ${
                 submitted && q.answer
                   ? (answers[q.id] || '').trim().toLowerCase() === q.answer.toLowerCase()
-                    ? 'bg-green-50 border-green-300'
-                    : 'bg-red-50 border-red-300'
-                  : 'bg-gray-50 border-gray-200'
+                    ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-400'
+                    : 'bg-gradient-to-br from-red-50 to-pink-50 border-red-400'
+                  : 'bg-white border-gray-200 hover:border-purple-300 hover:shadow-lg'
               }`}
             >
-              <div className="flex items-start gap-2">
-                <span className="font-bold text-sm sm:text-base text-purple-600 min-w-5 sm:min-w-6 flex-shrink-0">
-                  {index + 1}.
-                </span>
+              <div className="flex items-start gap-3">
+                <div className={`flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold text-sm sm:text-base ${
+                  submitted && q.answer
+                    ? (answers[q.id] || '').trim().toLowerCase() === q.answer.toLowerCase()
+                      ? 'bg-green-500 text-white'
+                      : 'bg-red-500 text-white'
+                    : 'bg-purple-500 text-white'
+                }`}>
+                  {index + 1}
+                </div>
                 <div className="flex-1 min-w-0 w-full">
-                  <p className="text-xs sm:text-sm md:text-base mb-2 break-words">{q.question}</p>
+                  <p className="text-sm sm:text-base md:text-lg mb-3 text-gray-800 font-medium break-words leading-relaxed">{q.question}</p>
                   <input
                     type="text"
                     value={answers[q.id] || ''}
                     onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                     disabled={!isActive || submitted}
-                    className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none disabled:bg-gray-100 text-xs sm:text-sm"
+                    className="w-full px-4 py-2.5 sm:py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 focus:outline-none disabled:bg-gray-100 text-sm sm:text-base transition-all"
                     placeholder="Your answer"
                   />
                   {submitted && q.answer && (
-                    <div className="mt-1.5 sm:mt-2 flex items-center gap-1.5 sm:gap-2">
+                    <div className="mt-3 flex items-center gap-2">
                       {(answers[q.id] || '').trim().toLowerCase() === q.answer.toLowerCase() ? (
-                        <div className="flex items-center gap-1.5 sm:gap-2 text-green-600">
-                          <CheckCircle size={16} className="sm:w-5 sm:h-5 flex-shrink-0" />
-                          <span className="font-semibold text-xs sm:text-sm">Correct!</span>
+                        <div className="flex items-center gap-2 text-green-600 bg-green-100 px-3 py-1.5 rounded-lg">
+                          <CheckCircle size={18} className="flex-shrink-0" />
+                          <span className="font-semibold text-sm">Correct!</span>
                         </div>
                       ) : (
                         <div className="text-red-600">
-                          <div className="flex items-center gap-1.5 sm:gap-2">
-                            <XCircle size={16} className="sm:w-5 sm:h-5 flex-shrink-0" />
-                            <span className="font-semibold text-xs sm:text-sm">Incorrect</span>
+                          <div className="flex items-center gap-2 bg-red-100 px-3 py-1.5 rounded-lg mb-1.5">
+                            <XCircle size={18} className="flex-shrink-0" />
+                            <span className="font-semibold text-sm">Incorrect</span>
                           </div>
-                          <p className="mt-1 text-xs break-words">Correct answer: {q.answer}</p>
+                          <p className="text-xs bg-red-50 px-3 py-1.5 rounded-lg break-words border-l-4 border-red-400">
+                            <span className="font-semibold">Correct answer:</span> {q.answer}
+                          </p>
                         </div>
                       )}
                     </div>
@@ -600,11 +625,13 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
         {isActive && !submitted && (
           <button
             onClick={handleSubmit}
-            className="w-full mt-3 sm:mt-4 px-4 py-2 sm:py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 font-semibold text-sm sm:text-base"
+            className="w-full mt-5 sm:mt-6 px-6 py-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl hover:from-purple-600 hover:to-purple-700 font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02]"
           >
-            Submit Test
+            ✓ Submit Test
           </button>
         )}
+          </div>
+        </div>
       </div>
     </div>
   );
