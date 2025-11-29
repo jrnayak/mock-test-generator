@@ -337,7 +337,7 @@ Generate ONLY the questions, one per line, without numbering or explanations.`
             </p>
           </div>
 
-          <div className="p-3 sm:p-6"
+          <div className="p-3 sm:p-6">
 
         {/* Topic Selection and Controls */}
         <div className="mb-4 sm:mb-5 space-y-3">
